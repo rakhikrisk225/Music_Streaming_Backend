@@ -71,9 +71,7 @@ public class UserController
     }
 
     @PostMapping("/insert/{name}/{contact}/{status}")
-    public String insertUser(@PathVariable String name,
-                         @PathVariable long contact,
-                         @PathVariable("status") String userstatus)
+    public String insertUser(@PathVariable String name, @PathVariable long contact, @PathVariable("status") String userstatus)
     {
         userService.insertUser(name, contact, userstatus);
 
