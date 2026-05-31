@@ -1,17 +1,16 @@
 package mini_music_streaming.music_streaming.entity;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -82,34 +81,21 @@ public class TrackEntity {
         this.movie = movie;
     }
 
-
-    //Many to One Mapping.
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonBackReference("user_track")
-    private UserEntity user;
-
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
     //Many to Many Mapping with PlaylistEntity.
     @ManyToMany(mappedBy = "tracks")
-    private List<PlaylistEntity>playlist;
+    @JsonIgnore
+    private List<PlaylistEntity>playlist= new ArrayList<>();
 
 
-    public List<PlaylistEntity> getPlaylist() {
+    public List<PlaylistEntity> getPlaylist() 
+    {
         return playlist;
     }
 
-    public void setPlaylist(List<PlaylistEntity> playlist) {
+    public void setPlaylist(List<PlaylistEntity> playlist) 
+    {
         this.playlist = playlist;
     }
 
 
-}
+}    
