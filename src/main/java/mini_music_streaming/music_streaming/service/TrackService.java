@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mini_music_streaming.music_streaming.entity.PlaylistEntity;
 import mini_music_streaming.music_streaming.entity.TrackEntity;
+import mini_music_streaming.music_streaming.repository.PlaylistRepository;
 import mini_music_streaming.music_streaming.repository.TrackRepository;
 
 @Service
@@ -13,10 +15,27 @@ public class TrackService
 {
     @Autowired
     private TrackRepository trackRepository;  
+
+    @Autowired
+    private PlaylistRepository playlistRepository;
     
     public TrackEntity createTrack(TrackEntity track)
     {
-        return trackRepository.save(track);
+        TrackEntity savedTrack = trackRepository.save(track);
+
+        if(track.getPlaylist() != null)
+        {
+            for(PlaylistEntity p : track.getPlaylist())
+            {
+                PlaylistEntity playlist =playlistRepository.findById(p.getId()).orElseThrow();
+
+                playlist.getTracks().add(savedTrack);
+
+                playlistRepository.save(playlist);
+            }
+    
+        }   
+             return savedTrack;
     }
 
     public List<TrackEntity> getAllTracks()
