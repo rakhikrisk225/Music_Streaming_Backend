@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import mini_music_streaming.music_streaming.entity.TrackEntity;
+import mini_music_streaming.music_streaming.entity.PlaylistEntity;
 import mini_music_streaming.music_streaming.entity.UserEntity;
 import mini_music_streaming.music_streaming.repository.UserRepository;
 
@@ -17,13 +17,13 @@ public class UserService {
 
     public UserEntity createUser(UserEntity user)
     {
-        if(user.getTracks() != null)
-        {
-            for(TrackEntity track : user.getTracks())
+        if(user.getPlaylist() != null)
             {
-                track.setUser(user);
+                for(PlaylistEntity playlist : user.getPlaylist())
+                {
+                    playlist.setUser(user);
+                }
             }
-        }
         return userRepository.save(user);
     }
 
