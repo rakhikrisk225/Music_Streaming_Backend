@@ -21,21 +21,21 @@ public class UserEntity
     @Id
     @GeneratedValue(strategy =GenerationType.IDENTITY)
 
-    private long Id;
+    private Long Id;
 
     private String name;
 
-    private long contact;
+    private Long contact;
     
     private String userstatus;
 
     
 
-    public long getId() {
+    public Long getId() {
         return Id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         Id = id;
     }
 
@@ -51,7 +51,7 @@ public class UserEntity
         return contact;
     }
 
-    public void setContact(long contact) {
+    public void setContact(Long contact) {
         this.contact = contact;
     }
     public String getUserstatus() {
@@ -63,17 +63,20 @@ public class UserEntity
         this.userstatus = userstatus;
     }
 
+
+    //One to Many Mapping with user to playlistEntity. 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    @JsonManagedReference("user_track")
-    private List<TrackEntity> tracks;
+    @JsonManagedReference("user_playlist")
+    private List<PlaylistEntity>playlist;
 
-    public List<TrackEntity> getTracks() 
-    {
-        return tracks;
+
+
+    public List<PlaylistEntity> getPlaylist() {
+        return playlist;
     }
 
-    public void setTracks(List<TrackEntity> tracks) 
-    {
-        this.tracks = tracks;
+    public void setPlaylist(List<PlaylistEntity> playlist) {
+        this.playlist = playlist;
     }
+    
 }
