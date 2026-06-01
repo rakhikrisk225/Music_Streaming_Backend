@@ -2,9 +2,13 @@ package mini_music_streaming.music_streaming.entity;
 
 import java.util.List;
 
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,26 +30,19 @@ public class PlaylistEntity
 
     private String playlist;
 
+    private String createdby;
 
-    public Long getId() {
-        return id;
-    }
+    @CreationTimestamp
+    @Column(name="created_date",updatable = false)
+    private LocalDateTime created_date;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @CreationTimestamp
+    @Column(name = "updated_on",updatable = false)
+    private LocalDateTime updated_on;
 
-    public String getPlaylist() {
-        return playlist;
-    }
-
-    public void setPlaylist(String playlist) 
-    {
-        this.playlist = playlist;
-    }
     
 
-   // Many playlists belong to one user
+    // Many playlists belong to one user
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @JsonBackReference("user_playlist")
@@ -72,11 +69,64 @@ public class PlaylistEntity
     private List<TrackEntity>tracks;
 
 
-    public List<TrackEntity> getTracks() {
+    public List<TrackEntity> getTracks() 
+    {
         return tracks;
     }
 
-    public void setTracks(List<TrackEntity> tracks) {
+    public void setTracks(List<TrackEntity> tracks) 
+    {
         this.tracks = tracks;
+    }
+    
+
+    public Long getId() 
+    {
+        return id;
+    }
+
+    public void setId(Long id) 
+    {
+        this.id = id;
+    }
+
+    public String getPlaylist() 
+    {
+        return playlist;
+    }
+
+    public void setPlaylist(String playlist) 
+    {
+        this.playlist = playlist;
+    }
+
+    public String getCreatedby() 
+    {
+        return createdby;
+    }
+
+    public void setCreatedby(String createdby) 
+    {
+        this.createdby = createdby;
+    }
+
+    public LocalDateTime getCreated_date() 
+    {
+        return created_date;
+    }
+
+    public void setCreated_date(LocalDateTime created_date) 
+    {
+        this.created_date = created_date;
+    }
+
+    public LocalDateTime getUpdated_on() 
+    {
+        return updated_on;
+    }
+
+    public void setUpdated_on(LocalDateTime updated_on) 
+    {
+        this.updated_on = updated_on;
     }
 }
