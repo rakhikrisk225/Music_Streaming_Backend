@@ -1,11 +1,14 @@
 package mini_music_streaming.music_streaming.entity;
 
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.CreationTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,6 +34,34 @@ public class TrackEntity {
 
     private String movie;
 
+    private String createdby;
+
+    @CreationTimestamp
+    @Column(name="created_date",updatable = false)
+    private LocalDateTime created_date;
+
+    
+
+    @CreationTimestamp
+    @Column(name = "updated_on",updatable = false)
+    private LocalDateTime updated_on;
+
+    //Many to Many Mapping with PlaylistEntity.
+    @ManyToMany(mappedBy = "tracks")
+    @JsonIgnore
+    private List<PlaylistEntity>playlist= new ArrayList<>();
+
+
+    public List<PlaylistEntity> getPlaylist() 
+    {
+        return playlist;
+    }
+
+    public void setPlaylist(List<PlaylistEntity> playlist) 
+    {
+        this.playlist = playlist;
+    }
+    
 
     public Integer getId() {
         return Id;
@@ -81,21 +112,34 @@ public class TrackEntity {
         this.movie = movie;
     }
 
-    //Many to Many Mapping with PlaylistEntity.
-    @ManyToMany(mappedBy = "tracks")
-    @JsonIgnore
-    private List<PlaylistEntity>playlist= new ArrayList<>();
-
-
-    public List<PlaylistEntity> getPlaylist() 
+    public String getCreatedby() 
     {
-        return playlist;
+        return createdby;
     }
 
-    public void setPlaylist(List<PlaylistEntity> playlist) 
+    public void setCreatedby(String createdby) 
     {
-        this.playlist = playlist;
+        this.createdby = createdby;
     }
 
+    public LocalDateTime getCreated_date() 
+    {
+        return created_date;
+    }
 
-}    
+    public void setCreated_date(LocalDateTime created_date) 
+    {
+        this.created_date = created_date;
+    }
+
+    public LocalDateTime getUpdated_on() 
+    {
+        return updated_on;
+    }
+
+    public void setUpdated_on(LocalDateTime updated_on) 
+    {
+        this.updated_on = updated_on;
+    }
+
+}
