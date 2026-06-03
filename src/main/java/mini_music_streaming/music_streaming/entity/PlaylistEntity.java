@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,7 +42,7 @@ public class PlaylistEntity
     
 
     // Many playlists belong to one user
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference("user_playlist")
     private UserEntity user;
@@ -59,7 +58,7 @@ public class PlaylistEntity
     }
 
     //Many to Many relationship with Tack
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable
     (
         name="playlist_track",
