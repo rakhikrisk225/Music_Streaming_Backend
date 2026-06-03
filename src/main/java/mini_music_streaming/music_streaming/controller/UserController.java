@@ -77,4 +77,10 @@ public class UserController
 
         return "User Inserted Successfully";
     }
+
+    @GetMapping("/{id}/playlists-tracks")
+    public List<Object[]> getUserPlaylistTrackDetails(@PathVariable Long id)
+    {
+        return userService.getUserPlaylistTrackDetails(id);
+    }
 }
