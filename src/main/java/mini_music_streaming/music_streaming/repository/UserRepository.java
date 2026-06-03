@@ -33,5 +33,27 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>
                     @Param("contact") Long contact,
                     @Param("userstatus") String userstatus);
 
-
+    
+    @Query(value = """
+        SELECT
+            u.id AS user_id,
+            u.name AS user_name,
+            p.id AS playlist_id,
+            p.playlist AS playlist_name,
+            t.id AS track_id,
+            t.song,
+            t.singer,
+            t.movie,
+            t.duration
+            FROM user u
+            INNER JOIN playlist p
+            ON u.id = p.user_id
+            INNER JOIN playlist_track pt
+            ON p.id = pt.playlist_id
+            INNER JOIN track t
+            ON pt.track_id = t.id
+            WHERE u.id = ?1
+            """,
+            nativeQuery = true)
+            List<Object[]> getUserPlaylistTrackDetails(Long userId);
 }
