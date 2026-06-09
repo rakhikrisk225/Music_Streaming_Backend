@@ -34,7 +34,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>
                     @Param("userstatus") String userstatus);
 
     
-    @Query(value = """
+    /**@Query(value = """
         SELECT
             u.id AS user_id,
             u.name AS user_name,
@@ -55,5 +55,20 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>
             WHERE u.id = ?1
             """,
             nativeQuery = true)
-            List<Object[]> getUserPlaylistTrackDetails(Long userId);
+            List<Object[]> getUserPlaylistTrackDetails(Long userId);*/
+
+
+    /**@Query(value ="SELECT u.id, u.name, p.playlist, t.song " +"FROM user u " +"JOIN playlist p ON u.id = p.user_id " +
+        " JOIN track t ON p.track_id = t.id " +
+        "WHERE u.id = :userId",
+        nativeQuery = true)
+        List<Object[]> getUserPlaylistTrackDetails(@Param("userId") Long userId);*/
+
+        @Query(value = """
+        SELECT
+        u.id, u.name, p.playlist, t.song, t.singer, t.songtype FROM user u
+        JOIN playlist p ON u.id = p.user_id JOIN playlist_track pt ON p.id = pt.playlist_id JOIN track t ON pt.track_id = t.id 
+        WHERE u.id = :userId """, nativeQuery = true)
+        List<Object[]> getUserPlaylistTrackDetails(
+        @Param("userId") Long userId);
 }
