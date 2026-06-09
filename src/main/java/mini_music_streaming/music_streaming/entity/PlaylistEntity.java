@@ -1,12 +1,10 @@
 package mini_music_streaming.music_streaming.entity;
 
-import java.util.List;
-
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -57,7 +55,6 @@ public class PlaylistEntity
         this.user = user;
     }
 
-    //Many to Many relationship with Tack
     @ManyToMany
     @JoinTable
     (
@@ -67,17 +64,13 @@ public class PlaylistEntity
     )
     private List<TrackEntity>tracks;
 
-
-    public List<TrackEntity> getTracks() 
-    {
+    public List<TrackEntity> getTracks() {
         return tracks;
     }
 
-    public void setTracks(List<TrackEntity> tracks) 
-    {
+    public void setTracks(List<TrackEntity> tracks) {
         this.tracks = tracks;
     }
-    
 
     public Long getId() 
     {
