@@ -2,10 +2,10 @@ package mini_music_streaming.music_streaming.entity;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -40,8 +40,6 @@ public class TrackEntity {
     @Column(name="created_date",updatable = false)
     private LocalDateTime created_date;
 
-    
-
     @CreationTimestamp
     @Column(name = "updated_on",updatable = false)
     private LocalDateTime updated_on;
@@ -49,8 +47,7 @@ public class TrackEntity {
     //Many to Many Mapping with PlaylistEntity.
     @ManyToMany(mappedBy = "tracks")
     @JsonIgnore
-    private List<PlaylistEntity>playlist= new ArrayList<>();
-
+    private List<PlaylistEntity>playlist;
 
     public List<PlaylistEntity> getPlaylist() 
     {
@@ -61,7 +58,6 @@ public class TrackEntity {
     {
         this.playlist = playlist;
     }
-    
 
     public Integer getId() {
         return Id;
