@@ -28,12 +28,30 @@ public class PlaylistController
         return playlistService.getAllPlaylist();
     }
 
+    @GetMapping("/{id}")
+    public PlaylistEntity getPlaylistById(@PathVariable Long id)
+    {
+        return playlistService.getPlaylistById(id);
+    }
+
     @PostMapping
-    public PlaylistEntity createTrack(@RequestBody PlaylistEntity playlist)
+    public PlaylistEntity createPlaylist(@RequestBody PlaylistEntity playlist)
     {
         return playlistService.createPlaylist(playlist);
     }
 
+    @PutMapping("/{playlistId}/user/{userId}")
+    public PlaylistEntity assignUserToPlaylist(@PathVariable Long playlistId,@PathVariable Long userId)
+    {
+        return playlistService.assignUserToPlaylist(playlistId, userId);
+    }
+
+    @PutMapping("/{playlistId}/track/{trackId}")
+    public PlaylistEntity assignTrackToPlaylist(@PathVariable Long playlistId,@PathVariable Integer trackId)
+    {
+        return playlistService.assignTrackToPlaylist(playlistId, trackId);
+    }
+ 
     @PutMapping("/update/{Id}")
     public PlaylistEntity updateplaylist(@PathVariable Long Id,@RequestBody PlaylistEntity updatedplaylist)
     {
