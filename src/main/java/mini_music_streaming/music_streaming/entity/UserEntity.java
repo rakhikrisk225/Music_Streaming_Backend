@@ -119,8 +119,6 @@ public class UserEntity
     @JsonManagedReference("user_playlist")
     private List<PlaylistEntity>playlist;
 
-
-
     public List<PlaylistEntity> getPlaylist() 
     {
         return playlist;
