@@ -78,9 +78,21 @@ public class UserController
         return "User Inserted Successfully";
     }
 
-    @GetMapping("/{id}/playlists-tracks")
+    /**@GetMapping("/{id}/playlists-tracks")
     public List<Object[]> getUserPlaylistTrackDetails(@PathVariable Long id)
     {
         return userService.getUserPlaylistTrackDetails(id);
+    }*/
+
+   /**  @GetMapping("/details/{userId}")
+    public List<Object[]> getUserPlaylistTrackDetails(@PathVariable Long userId)
+    {
+        return userService.getUserPlaylistTrackDetails(userId);
+    }*/
+
+    @GetMapping("/details/{userId}")
+    public UserEntity getUserDetails(@PathVariable Long userId)
+    {
+        return userService.getUserById(userId);
     }
 }
