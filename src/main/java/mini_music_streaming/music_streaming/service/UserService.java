@@ -32,9 +32,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public UserEntity getUserById(Long Id)
+   public UserEntity getUserById(Long id)
     {
-        return userRepository.findById(Id).orElse(null);
+        return userRepository.findById(id).orElseThrow(() ->new RuntimeException("User not found"));
     }
 
     public String deleteUser(Long Id)
@@ -79,4 +79,11 @@ public class UserService {
     {
         userRepository.insertUser(name, contact, userstatus);
     }
+
+    public List<Object[]> getUserPlaylistTrackDetails(Long userId)
+    {
+        return userRepository.getUserPlaylistTrackDetails(userId);
+    }
+
+    
 }
