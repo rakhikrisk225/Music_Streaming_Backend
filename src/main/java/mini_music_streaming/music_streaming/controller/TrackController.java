@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import mini_music_streaming.music_streaming.dto.TrackDTO;
 import mini_music_streaming.music_streaming.entity.TrackEntity;
 import mini_music_streaming.music_streaming.service.TrackService;
 
@@ -53,4 +54,9 @@ public class TrackController
         return trackService.findBySong(song);
     }
 
+    @GetMapping("/{id}")
+    public TrackDTO getTrack(@PathVariable Integer id) 
+    {
+        return trackService.getTrackById(id);
+    }
 }

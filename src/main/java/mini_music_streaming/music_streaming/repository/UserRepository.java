@@ -1,5 +1,6 @@
 package mini_music_streaming.music_streaming.repository;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,6 +12,8 @@ import mini_music_streaming.music_streaming.entity.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> 
 {
+    Optional<UserEntity>findByEmail(String email);
+    boolean existsByEmail(String email);
 
     public List<UserEntity>findByName(String name);
 
@@ -32,43 +35,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>
     void insertUser(@Param("name") String name,
                     @Param("contact") Long contact,
                     @Param("userstatus") String userstatus);
-
-    
-    /**@Query(value = """
-        SELECT
-            u.id AS user_id,
-            u.name AS user_name,
-            p.id AS playlist_id,
-            p.playlist AS playlist_name,
-            t.id AS track_id,
-            t.song,
-            t.singer,
-            t.movie,
-            t.duration
-            FROM user u
-            INNER JOIN playlist p
-            ON u.id = p.user_id
-            INNER JOIN playlist_track pt
-            ON p.id = pt.playlist_id
-            INNER JOIN track t
-            ON pt.track_id = t.id
-            WHERE u.id = ?1
-            """,
-            nativeQuery = true)
-            List<Object[]> getUserPlaylistTrackDetails(Long userId);*/
-
-
-    /**@Query(value ="SELECT u.id, u.name, p.playlist, t.song " +"FROM user u " +"JOIN playlist p ON u.id = p.user_id " +
-        " JOIN track t ON p.track_id = t.id " +
-        "WHERE u.id = :userId",
-        nativeQuery = true)
-        List<Object[]> getUserPlaylistTrackDetails(@Param("userId") Long userId);*/
-
-        @Query(value = """
-        SELECT
-        u.id, u.name, p.playlist, t.song, t.singer, t.songtype FROM user u
-        JOIN playlist p ON u.id = p.user_id JOIN playlist_track pt ON p.id = pt.playlist_id JOIN track t ON pt.track_id = t.id 
-        WHERE u.id = :userId """, nativeQuery = true)
-        List<Object[]> getUserPlaylistTrackDetails(
-        @Param("userId") Long userId);
+        
 }

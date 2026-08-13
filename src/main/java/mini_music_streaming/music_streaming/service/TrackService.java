@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mini_music_streaming.music_streaming.dto.TrackDTO;
 import mini_music_streaming.music_streaming.entity.TrackEntity;
 import mini_music_streaming.music_streaming.repository.TrackRepository;
 
@@ -24,10 +25,10 @@ public class TrackService
         return trackRepository.findAll();
     }
 
-    public TrackEntity getTrackById(Integer Id)
+    /**public TrackEntity getTrackById(Integer Id)
     {
         return trackRepository.findById(Id).orElse(null);
-    }
+    }*/
 
     public String deleteTrack(Integer Id)
     {
@@ -54,5 +55,20 @@ public class TrackService
         return trackRepository.findBySong(song);
     }
 
+    public TrackDTO getTrackById(Integer id)
+    {
+        TrackEntity track =trackRepository.findById(id).orElseThrow(() ->new RuntimeException("Track not found"));
 
+        TrackDTO dto =new TrackDTO();
+
+        dto.setId(track.getId());
+        dto.setSong(track.getSong());
+        dto.setSinger(track.getSinger());
+        dto.setMovie(track.getMovie());
+        dto.setSongtype(track.getSongtype());
+
+        return dto;
+    }
 }
+
+

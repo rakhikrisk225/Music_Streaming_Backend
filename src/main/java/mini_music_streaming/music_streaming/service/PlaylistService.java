@@ -1,10 +1,15 @@
 package mini_music_streaming.music_streaming.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mini_music_streaming.music_streaming.dto.PlaylistDTO;
+import mini_music_streaming.music_streaming.dto.TrackDTO;
 import mini_music_streaming.music_streaming.entity.PlaylistEntity;
 import mini_music_streaming.music_streaming.entity.TrackEntity;
 import mini_music_streaming.music_streaming.entity.UserEntity;
@@ -15,6 +20,11 @@ import mini_music_streaming.music_streaming.repository.UserRepository;
 @Service
 public class PlaylistService 
 {
+    private static final Logger logger =
+        LoggerFactory.getLogger(
+                PlaylistService.class);
+
+                
     @Autowired
     private PlaylistRepository playlistRepository;
 
@@ -24,31 +34,128 @@ public class PlaylistService
     @Autowired
     private UserRepository userRepository;
 
-    public PlaylistEntity createPlaylist(PlaylistEntity playlist)
+    public PlaylistEntity createPlaylist(
+    PlaylistEntity playlist)
     {
-        return playlistRepository.save(playlist);
+        logger.info(
+        "Creating playlist {}",
+        playlist.getPlaylist());
+
+        PlaylistEntity saved =
+        playlistRepository
+        .save(playlist);
+
+        logger.info(
+        "Playlist created id {}",
+        saved.getId());
+
+        return saved;
     }
 
-    public PlaylistEntity assignUserToPlaylist(Long playlistId, Long userId)
+  public PlaylistEntity assignUserToPlaylist(
+        Long playlistId,
+        Long userId)
     {
-        PlaylistEntity playlist = playlistRepository.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist not found"));
+        logger.info(
+        "Assign user {} to playlist {}",
+        userId,
+        playlistId
+        );
 
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        PlaylistEntity playlist =
+        playlistRepository
+        .findById(playlistId)
+
+        .orElseThrow(() -> {
+
+            logger.warn(
+                "Playlist not found {}",
+                playlistId
+            );
+
+            return new RuntimeException(
+                "Playlist not found"
+            );
+        });
+
+        UserEntity user =
+        userRepository
+        .findById(userId)
+
+        .orElseThrow(() -> {
+
+            logger.warn(
+                "User not found {}",
+                userId
+            );
+
+            return new RuntimeException(
+                "User not found"
+            );
+        });
 
         playlist.setUser(user);
 
-        return playlistRepository.save(playlist);
+        PlaylistEntity saved =
+        playlistRepository
+        .save(playlist);
+
+        logger.info(
+        "User {} assigned to playlist {}",
+        userId,
+        playlistId
+        );
+
+        return saved;
     }
 
     public PlaylistEntity assignTrackToPlaylist(Long playlistId, Integer trackId)
     {
-        PlaylistEntity playlist = playlistRepository.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist not found"));
+        logger.info(
+            "Assign track {} to playlist {}",
+                    trackId,
+                    playlistId);
 
-        TrackEntity track = trackRepository.findById(trackId).orElseThrow(() -> new RuntimeException("Track not found"));
+        PlaylistEntity playlist =
+            playlistRepository
+                .findById(playlistId)
 
-        playlist.getTracks().add(track);
+                .orElseThrow(() -> 
+                {
 
-        return playlistRepository.save(playlist);
+                    logger.warn(
+                    "Playlist not found {}",
+                    playlistId);
+
+                    return new RuntimeException(
+                    "Playlist not found");
+
+                });
+
+        TrackEntity track =
+        trackRepository
+        .findById(trackId)
+
+        .orElseThrow(() -> 
+        {
+
+            logger.warn(
+            "Track not found {}",
+            trackId);
+
+            return new RuntimeException(
+                "Track not found");
+
+        });
+
+        playlist.getTracks()
+            .add(track);
+
+        logger.info(
+            "Track added successfully");
+
+        return playlistRepository
+            .save(playlist);
     }
 
     public List<PlaylistEntity>getAllPlaylist()
@@ -80,4 +187,60 @@ public class PlaylistService
 
         return null;
     }
+
+    public PlaylistDTO getPlaylist(
+            Long id) {
+
+        PlaylistEntity playlist =
+                playlistRepository
+                .findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Playlist not found"));
+
+        PlaylistDTO dto =
+                new PlaylistDTO();
+
+        dto.setId(
+                playlist.getId());
+
+        dto.setPlaylist(
+                playlist.getPlaylist());
+
+        dto.setTracks(
+
+            playlist.getTracks()
+            .stream()
+            .map(track -> {
+
+                TrackDTO t =
+                        new TrackDTO();
+
+                t.setId(
+                        track.getId());
+
+                t.setSong(
+                        track.getSong());
+
+                t.setSinger(
+                        track.getSinger());
+
+                t.setMovie(
+                        track.getMovie());
+
+
+                t.setSongtype(
+                        track.getSongtype());
+
+                return t;
+
+            }).collect
+            (
+                Collectors.toList()
+            )
+        );
+
+        return dto;
+    }
 }
+

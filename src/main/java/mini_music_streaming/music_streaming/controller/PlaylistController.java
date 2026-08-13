@@ -1,9 +1,11 @@
 package mini_music_streaming.music_streaming.controller;
 
+import mini_music_streaming.music_streaming.dto.PlaylistDTO;
 import mini_music_streaming.music_streaming.entity.PlaylistEntity;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import mini_music_streaming.music_streaming.service.PlaylistService;
 
 @RestController
@@ -29,13 +32,13 @@ public class PlaylistController
     }
 
     @GetMapping("/{id}")
-    public PlaylistEntity getPlaylistById(@PathVariable Long id)
+    public PlaylistDTO getPlaylist(@PathVariable Long id) 
     {
-        return playlistService.getPlaylistById(id);
+        return playlistService.getPlaylist(id);
     }
 
     @PostMapping
-    public PlaylistEntity createPlaylist(@RequestBody PlaylistEntity playlist)
+    public PlaylistEntity createPlaylist(@Valid @RequestBody PlaylistEntity playlist)
     {
         return playlistService.createPlaylist(playlist);
     }
@@ -52,15 +55,19 @@ public class PlaylistController
         return playlistService.assignTrackToPlaylist(playlistId, trackId);
     }
  
-    @PutMapping("/update/{Id}")
-    public PlaylistEntity updateplaylist(@PathVariable Long Id,@RequestBody PlaylistEntity updatedplaylist)
+    @PutMapping("/{Id}")
+    public PlaylistEntity updatePlaylist(@PathVariable Long Id,@RequestBody PlaylistEntity updatedplaylist)
     {
         return playlistService.updatePlaylist(Id, updatedplaylist);
     }
 
-    @DeleteMapping("/delete/{Id}")
-    public String deletePlaylist(@PathVariable Long Id)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePlaylist(
+        @PathVariable Long id)
     {
-        return playlistService.deletePlaylist(Id);
+        playlistService.deletePlaylist(id);
+
+        return ResponseEntity.ok(
+        "Playlist Deleted Successfully");
     }
 }
